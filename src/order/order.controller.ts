@@ -6,6 +6,7 @@ import { Prisma } from '@prisma/client';
 export class OrderController {
   constructor(private readonly orderService: OrderService) { }
 
+  
   @Post()
   create(@Body() data: Prisma.orderCreateInput) {
     return this.orderService.create(data);
