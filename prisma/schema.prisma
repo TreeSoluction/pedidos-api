@@ -29,9 +29,10 @@ model order_item {
 }
 
 model product {
-  id         String       @id @default(uuid())
-  price      Float
-  name       String
-  category   String
-  order_item order_item[]
+  id             String       @id @default(uuid())
+  purchase_price Float?
+  buy_price      Float?
+  name           String
+  category       String
+  order_item     order_item[]
 }
