@@ -4,7 +4,7 @@ import { category, Prisma } from '@prisma/client';
 
 @Injectable()
 export class CategoryService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.categoryCreateInput): Promise<category> {
     return this.prisma.category.create({ data });
@@ -18,7 +18,10 @@ export class CategoryService {
     return this.prisma.category.findUnique({ where: { id } });
   }
 
-  async update(id: string, data: Prisma.categoryUpdateInput): Promise<category> {
+  async update(
+    id: string,
+    data: Prisma.categoryUpdateInput,
+  ): Promise<category> {
     return this.prisma.category.update({ where: { id }, data });
   }
 
