@@ -22,7 +22,8 @@ model order_item {
   order       order    @relation(fields: [order_id], references: [id])
   product_id  String
   product     product  @relation(fields: [product_id], references: [id])
-  price       Float
+  sold_price  Float
+  buy_price   Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   observation String?
@@ -37,13 +38,13 @@ model category {
 }
 
 model product {
-  id             String       @id @default(uuid())
-  purchase_price Float?
-  buy_price      Float?
-  name           String
-  category       category     @relation(fields: [category_id], references: [id])
-  category_id    String
-  order_item     order_item[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  id          String       @id @default(uuid())
+  sold_price  Float        @default(0)
+  buy_price   Float        @default(0)
+  name        String
+  category    category     @relation(fields: [category_id], references: [id])
+  category_id String
+  order_item  order_item[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
