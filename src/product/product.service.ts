@@ -4,7 +4,7 @@ import { Prisma, product } from '@prisma/client';
 
 @Injectable()
 export class ProductService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.productCreateInput): Promise<product> {
     return this.prisma.product.create({ data });

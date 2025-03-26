@@ -60,7 +60,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "engines": {
-    "node": ">=20 <21"
+    "node": ">=22"
   },
   "jest": {
     "moduleFileExtensions": [

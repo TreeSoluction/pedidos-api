@@ -1,10 +1,18 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Prisma } from '@prisma/client';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
   @Post()
   async create(@Body() createProductDto: Prisma.productCreateInput) {
@@ -22,7 +30,10 @@ export class ProductController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateProductDto: Prisma.productUpdateInput) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: Prisma.productUpdateInput,
+  ) {
     return this.productService.update(id, updateProductDto);
   }
 

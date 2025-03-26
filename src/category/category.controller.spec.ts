@@ -61,7 +61,9 @@ describe('CategoryController', () => {
   it('should delete a category', async () => {
     const category = await prisma.category.findFirstOrThrow();
     await prisma.category.delete({ where: { id: category.id } });
-    const deletedCategory = await prisma.category.findUnique({ where: { id: category.id } });
+    const deletedCategory = await prisma.category.findUnique({
+      where: { id: category.id },
+    });
     expect(deletedCategory).toBeNull();
   });
 });

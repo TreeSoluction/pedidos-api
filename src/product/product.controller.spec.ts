@@ -15,7 +15,7 @@ describe('ProductService', () => {
 
     service = module.get<ProductService>(ProductService);
     prisma = module.get<PrismaService>(PrismaService);
-    await prisma.category.create({ data: { name: "Teste" } })
+    await prisma.category.create({ data: { name: 'Teste' } });
   });
 
   afterAll(async () => {
@@ -33,7 +33,9 @@ describe('ProductService', () => {
       name: 'Test Product',
       purchase_price: 100.0,
       buy_price: 120.0,
-      category: { connect: { id: (await prisma.category.findFirstOrThrow()).id } },
+      category: {
+        connect: { id: (await prisma.category.findFirstOrThrow()).id },
+      },
     };
 
     const createdProduct = await service.create(productData);
@@ -55,7 +57,9 @@ describe('ProductService', () => {
         name: 'Findable Product',
         purchase_price: 80.0,
         buy_price: 100.0,
-        category: { connect: { id: (await prisma.category.findFirstOrThrow()).id } },
+        category: {
+          connect: { id: (await prisma.category.findFirstOrThrow()).id },
+        },
       },
     });
 
@@ -72,7 +76,9 @@ describe('ProductService', () => {
         name: 'Product to Update',
         purchase_price: 90.0,
         buy_price: 110.0,
-        category: { connect: { id: (await prisma.category.findFirstOrThrow()).id } },
+        category: {
+          connect: { id: (await prisma.category.findFirstOrThrow()).id },
+        },
       },
     });
 
@@ -94,14 +100,18 @@ describe('ProductService', () => {
         name: 'Product to Delete',
         purchase_price: 60.0,
         buy_price: 80.0,
-        category: { connect: { id: (await prisma.category.findFirstOrThrow()).id } },
+        category: {
+          connect: { id: (await prisma.category.findFirstOrThrow()).id },
+        },
       },
     });
 
     const deletedProduct = await service.remove(product.id);
     expect(deletedProduct.id).toBe(product.id);
 
-    const foundProduct = await prisma.product.findUnique({ where: { id: product.id } });
+    const foundProduct = await prisma.product.findUnique({
+      where: { id: product.id },
+    });
     expect(foundProduct).toBeNull();
   });
 });
