@@ -31,7 +31,7 @@ describe('ProductService', () => {
   it('should create a product', async () => {
     const productData: Prisma.productCreateInput = {
       name: 'Test Product',
-      purchase_price: 100.0,
+      sold_price: 100.0,
       buy_price: 120.0,
       category: { connect: { id: (await prisma.category.findFirstOrThrow()).id } },
     };
@@ -39,7 +39,7 @@ describe('ProductService', () => {
     const createdProduct = await service.create(productData);
     expect(createdProduct).toHaveProperty('id');
     expect(createdProduct.name).toBe(productData.name);
-    expect(createdProduct.purchase_price).toBe(productData.purchase_price);
+    expect(createdProduct.sold_price).toBe(productData.sold_price);
     expect(createdProduct.buy_price).toBe(productData.buy_price);
   });
 
@@ -53,7 +53,7 @@ describe('ProductService', () => {
     const product = await prisma.product.create({
       data: {
         name: 'Findable Product',
-        purchase_price: 80.0,
+        sold_price: 80.0,
         buy_price: 100.0,
         category: { connect: { id: (await prisma.category.findFirstOrThrow()).id } },
       },
@@ -70,7 +70,7 @@ describe('ProductService', () => {
     const product = await prisma.product.create({
       data: {
         name: 'Product to Update',
-        purchase_price: 90.0,
+        sold_price: 90.0,
         buy_price: 110.0,
         category: { connect: { id: (await prisma.category.findFirstOrThrow()).id } },
       },
@@ -78,13 +78,13 @@ describe('ProductService', () => {
 
     const updatedData: Prisma.productUpdateInput = {
       name: 'Updated Product',
-      purchase_price: 95.0,
+      sold_price: 95.0,
       buy_price: 115.0,
     };
 
     const updatedProduct = await service.update(product.id, updatedData);
     expect(updatedProduct.name).toBe('Updated Product');
-    expect(updatedProduct.purchase_price).toBe(95.0);
+    expect(updatedProduct.sold_price).toBe(95.0);
     expect(updatedProduct.buy_price).toBe(115.0);
   });
 
@@ -92,7 +92,7 @@ describe('ProductService', () => {
     const product = await prisma.product.create({
       data: {
         name: 'Product to Delete',
-        purchase_price: 60.0,
+        sold_price: 60.0,
         buy_price: 80.0,
         category: { connect: { id: (await prisma.category.findFirstOrThrow()).id } },
       },
