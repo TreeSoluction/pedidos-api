@@ -5,7 +5,7 @@ import { connect } from 'http2';
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.orderCreateInput): Promise<order> {
     if (!Array.isArray(data.items)) {
@@ -19,7 +19,7 @@ export class OrderService {
           create: await Promise.all(
             data.items.map(async (item) => {
               const product = await this.prisma.product.findUnique({
-                where: { id: item.create.product.connect.id },
+                where: { id: item.id },
                 select: { buy_price: true, sold_price: true, id: true },
               });
 
@@ -30,15 +30,15 @@ export class OrderService {
               return {
                 sold_price: product.sold_price,
                 buy_price: product.buy_price,
-                product: { connect: { id: product.id } }
+                product: { connect: { id: product.id } },
               };
-            })
+            }),
           ),
         },
-      }, include: { items: true },
+      },
+      include: { items: true },
     });
   }
-
 
   async findAll(): Promise<order[]> {
     return this.prisma.order.findMany({ include: { items: true } });
