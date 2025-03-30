@@ -19,9 +19,9 @@ model order {
 model order_item {
   id          String   @id @default(uuid())
   order_id    String
-  order       order    @relation(fields: [order_id], references: [id])
+  order       order    @relation(fields: [order_id], references: [id], onDelete: Cascade)
   product_id  String
-  product     product  @relation(fields: [product_id], references: [id])
+  product     product  @relation(fields: [product_id], references: [id], onDelete: Restrict)
   sold_price  Float
   buy_price   Float
   createdAt   DateTime @default(now())
