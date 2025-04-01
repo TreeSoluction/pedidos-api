@@ -10,12 +10,12 @@ import {
 import { CategoryService } from './category.service';
 import { Prisma } from '@prisma/client';
 
-@Controller('category')
+@Controller('categories')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
   @Post()
-  create(@Body() createCategoryDto: Prisma.categoryCreateInput) {
+  create(@Body() createCategoryDto: Prisma.categoriesCreateInput) {
     return this.categoryService.create(createCategoryDto);
   }
 
@@ -32,7 +32,7 @@ export class CategoryController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateCategoryDto: Prisma.categoryCreateInput,
+    @Body() updateCategoryDto: Prisma.categoriesCreateInput,
   ) {
     return this.categoryService.update(id, updateCategoryDto);
   }

@@ -7,7 +7,7 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) { }
 
   @Post()
-  create(@Body() data: Prisma.orderCreateInput) {
+  create(@Body() data: Prisma.ordersCreateInput) {
     return this.orderService.create(data);
   }
 
@@ -22,7 +22,7 @@ export class OrderController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() data: Prisma.orderUpdateInput) {
+  update(@Param('id') id: string, @Body() data: Prisma.ordersUpdateInput) {
     return this.orderService.update(id, data);
   }
 

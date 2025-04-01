@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
-@Controller('plot')
+@Controller('plots')
 export class PlotController {
   constructor(private readonly prismaService: PrismaService) { }
 
@@ -24,7 +24,7 @@ export class PlotController {
     const endOfLastWeek = new Date(endOfThisWeek);
     endOfLastWeek.setUTCDate(endOfThisWeek.getUTCDate() - 7);
 
-    const itemsThisWeek = await this.prismaService.order_item.findMany({
+    const itemsThisWeek = await this.prismaService.order_items.findMany({
       where: {
         createdAt: {
           gte: startOfThisWeek,
@@ -47,7 +47,7 @@ export class PlotController {
       .slice(0, 3)
       .map(([name]) => name);
 
-    const itemsLastWeek = await this.prismaService.order_item.findMany({
+    const itemsLastWeek = await this.prismaService.order_items.findMany({
       where: {
         createdAt: {
           gte: startOfLastWeek,
@@ -83,7 +83,7 @@ export class PlotController {
     const endOfDay = new Date(now);
     endOfDay.setHours(26, 59);
 
-    const items = await this.prismaService.order_item.findMany({
+    const items = await this.prismaService.order_items.findMany({
       where: {
         createdAt: {
           gte: startOfDay,
@@ -117,7 +117,7 @@ export class PlotController {
     endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
     endOfWeek.setUTCHours(26, 59);
 
-    const items = await this.prismaService.order_item.findMany({
+    const items = await this.prismaService.order_items.findMany({
       where: {
         createdAt: {
           gte: startOfWeek,
@@ -153,7 +153,7 @@ export class PlotController {
 
     return {
       goal: 100,
-      reach: await this.prismaService.order.count({
+      reach: await this.prismaService.orders.count({
         where: {
           createdAt: {
             gte: startOfWeek,
@@ -176,7 +176,7 @@ export class PlotController {
 
     return {
       goal: 20,
-      reach: await this.prismaService.order.count({
+      reach: await this.prismaService.orders.count({
         where: {
           createdAt: {
             gte: startOfDay,

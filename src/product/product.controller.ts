@@ -12,10 +12,10 @@ import { Prisma } from '@prisma/client';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
   @Post()
-  async create(@Body() createProductDto: Prisma.productCreateInput) {
+  async create(@Body() createProductDto: Prisma.productsCreateInput) {
     return this.productService.create(createProductDto);
   }
 
@@ -32,7 +32,7 @@ export class ProductController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateProductDto: Prisma.productUpdateInput,
+    @Body() updateProductDto: Prisma.productsUpdateInput,
   ) {
     return this.productService.update(id, updateProductDto);
   }

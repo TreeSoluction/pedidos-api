@@ -15,12 +15,12 @@ describe('ProductService', () => {
 
     service = module.get<ProductService>(ProductService);
     prisma = module.get<PrismaService>(PrismaService);
-    await prisma.category.create({ data: { name: 'Teste' } });
+    await prisma.categories.create({ data: { name: 'Teste' } });
   });
 
   afterAll(async () => {
-    await prisma.product.deleteMany();
-    await prisma.category.deleteMany();
+    await prisma.products.deleteMany();
+    await prisma.categories.deleteMany();
     await prisma.$disconnect();
   });
 
@@ -29,12 +29,12 @@ describe('ProductService', () => {
   });
 
   it('should create a product', async () => {
-    const productData: Prisma.productCreateInput = {
+    const productData: Prisma.productsCreateInput = {
       name: 'Test Product',
       sold_price: 100.0,
       buy_price: 120.0,
       category: {
-        connect: { id: (await prisma.category.findFirstOrThrow()).id },
+        connect: { id: (await prisma.categories.findFirstOrThrow()).id },
       },
     };
 
@@ -52,13 +52,13 @@ describe('ProductService', () => {
   });
 
   it('should retrieve one product by ID', async () => {
-    const product = await prisma.product.create({
+    const product = await prisma.products.create({
       data: {
         name: 'Findable Product',
         sold_price: 80.0,
         buy_price: 100.0,
         category: {
-          connect: { id: (await prisma.category.findFirstOrThrow()).id },
+          connect: { id: (await prisma.categories.findFirstOrThrow()).id },
         },
       },
     });
@@ -71,18 +71,18 @@ describe('ProductService', () => {
   });
 
   it('should update a product', async () => {
-    const product = await prisma.product.create({
+    const product = await prisma.products.create({
       data: {
         name: 'Product to Update',
         sold_price: 90.0,
         buy_price: 110.0,
         category: {
-          connect: { id: (await prisma.category.findFirstOrThrow()).id },
+          connect: { id: (await prisma.categories.findFirstOrThrow()).id },
         },
       },
     });
 
-    const updatedData: Prisma.productUpdateInput = {
+    const updatedData: Prisma.productsUpdateInput = {
       name: 'Updated Product',
       sold_price: 95.0,
       buy_price: 115.0,
@@ -95,13 +95,13 @@ describe('ProductService', () => {
   });
 
   it('should delete a product', async () => {
-    const product = await prisma.product.create({
+    const product = await prisma.products.create({
       data: {
         name: 'Product to Delete',
         sold_price: 60.0,
         buy_price: 80.0,
         category: {
-          connect: { id: (await prisma.category.findFirstOrThrow()).id },
+          connect: { id: (await prisma.categories.findFirstOrThrow()).id },
         },
       },
     });
@@ -109,7 +109,7 @@ describe('ProductService', () => {
     const deletedProduct = await service.remove(product.id);
     expect(deletedProduct.id).toBe(product.id);
 
-    const foundProduct = await prisma.product.findUnique({
+    const foundProduct = await prisma.products.findUnique({
       where: { id: product.id },
     });
     expect(foundProduct).toBeNull();

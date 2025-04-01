@@ -1,24 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { order, Prisma } from '@prisma/client';
+import { orders, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { connect } from 'http2';
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
-  async create(data: Prisma.orderCreateInput): Promise<order> {
+  async create(data: Prisma.ordersCreateInput): Promise<orders> {
     if (!Array.isArray(data.items)) {
       throw new Error('Items must be an array');
     }
 
-    return await this.prisma.order.create({
+    return await this.prisma.orders.create({
       data: {
         ...data,
         items: {
           create: await Promise.all(
             data.items.map(async (item) => {
-              const product = await this.prisma.product.findUnique({
+              const product = await this.prisma.products.findUnique({
                 where: { id: item.id },
                 select: { buy_price: true, sold_price: true, id: true },
               });
@@ -40,22 +39,22 @@ export class OrderService {
     });
   }
 
-  async findAll(): Promise<order[]> {
-    return this.prisma.order.findMany({ include: { items: true } });
+  async findAll(): Promise<orders[]> {
+    return this.prisma.orders.findMany({ include: { items: true } });
   }
 
-  async findOne(id: string): Promise<order | null> {
-    return this.prisma.order.findUnique({
+  async findOne(id: string): Promise<orders | null> {
+    return this.prisma.orders.findUnique({
       where: { id },
       include: { items: true },
     });
   }
 
-  async update(id: string, data: Prisma.orderUpdateInput): Promise<order> {
-    return this.prisma.order.update({ where: { id }, data });
+  async update(id: string, data: Prisma.ordersUpdateInput): Promise<orders> {
+    return this.prisma.orders.update({ where: { id }, data });
   }
 
-  async remove(id: string): Promise<order> {
-    return this.prisma.order.delete({ where: { id } });
+  async remove(id: string): Promise<orders> {
+    return this.prisma.orders.delete({ where: { id } });
   }
 }
