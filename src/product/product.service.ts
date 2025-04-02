@@ -4,7 +4,7 @@ import { Prisma, products } from '@prisma/client';
 
 @Injectable()
 export class ProductService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.productsCreateInput): Promise<products> {
     return this.prisma.products.create({ data });
@@ -15,10 +15,18 @@ export class ProductService {
   }
 
   async findOne(id: string): Promise<products | null> {
-    return this.prisma.products.findUnique({ where: { id } });
+    return this.prisma.products.findUnique({
+      where: { id },
+      include: {
+        product_ingredients: true,
+      },
+    });
   }
 
-  async update(id: string, data: Prisma.productsUpdateInput): Promise<products> {
+  async update(
+    id: string,
+    data: Prisma.productsUpdateInput,
+  ): Promise<products> {
     return this.prisma.products.update({ where: { id }, data });
   }
 
