@@ -4,10 +4,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class IngredientService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(createIngredientDto: Prisma.ingredientsCreateInput) {
-    return await this.prisma.ingredients.create({ data: createIngredientDto })
+    return await this.prisma.ingredients.create({ data: createIngredientDto });
   }
 
   async findAll(): Promise<ingredients[]> {
@@ -20,7 +20,10 @@ export class IngredientService {
     });
   }
 
-  async update(id: string, data: Prisma.ingredientsUpdateInput): Promise<ingredients> {
+  async update(
+    id: string,
+    data: Prisma.ingredientsUpdateInput,
+  ): Promise<ingredients> {
     return this.prisma.ingredients.update({ where: { id }, data });
   }
 

@@ -1,10 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
 import { Prisma } from '@prisma/client';
 
 @Controller('ingredients')
 export class IngredientController {
-  constructor(private readonly ingredientService: IngredientService) { }
+  constructor(private readonly ingredientService: IngredientService) {}
 
   @Post()
   create(@Body() createIngredientDto: Prisma.ingredientsCreateInput) {
@@ -22,7 +30,10 @@ export class IngredientController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateIngredientDto: Prisma.ingredientsUpdateInput) {
+  update(
+    @Param('id') id: string,
+    @Body() updateIngredientDto: Prisma.ingredientsUpdateInput,
+  ) {
     return this.ingredientService.update(id, updateIngredientDto);
   }
 

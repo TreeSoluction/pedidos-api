@@ -4,7 +4,8 @@ import { PrismaClient } from '@prisma/client';
 @Injectable()
 export class PrismaService
   extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy {
+  implements OnModuleInit, OnModuleDestroy
+{
   async onModuleInit() {
     await this.$connect();
   }
@@ -16,7 +17,10 @@ export class PrismaService
   constructor() {
     super();
     this.$use(async (params, next) => {
-      if (params.model === 'products' && ['findMany', 'findUnique', 'create', 'update'].includes(params.action)) {
+      if (
+        params.model === 'products' &&
+        ['findMany', 'findUnique', 'create', 'update'].includes(params.action)
+      ) {
         const result = await next(params);
         
         const computeBuyPrice = async (product) => {

@@ -21,19 +21,45 @@ describe('PlotController (e2e)', () => {
     await prisma.order_item.deleteMany();
     await prisma.order.deleteMany();
     await prisma.product.deleteMany();
-    const category = await prisma.category.create({ data: { name: "Teste" } })
+    const category = await prisma.category.create({ data: { name: 'Teste' } });
 
-    const productA = await prisma.product.create({ data: { name: 'Produto A', category_id: category.id } });
-    const productB = await prisma.product.create({ data: { name: 'Produto B', category_id: category.id } });
+    const productA = await prisma.product.create({
+      data: { name: 'Produto A', category_id: category.id },
+    });
+    const productB = await prisma.product.create({
+      data: { name: 'Produto B', category_id: category.id },
+    });
 
-    const order1 = await prisma.order.create({ data: { createdAt: new Date() } });
-    const order2 = await prisma.order.create({ data: { createdAt: new Date() } });
+    const order1 = await prisma.order.create({
+      data: { createdAt: new Date() },
+    });
+    const order2 = await prisma.order.create({
+      data: { createdAt: new Date() },
+    });
 
     await prisma.order_item.createMany({
       data: [
-        { order_id: order1.id, product_id: productA.id, createdAt: new Date(), sold_price: 10, buy_price: 10 },
-        { order_id: order2.id, product_id: productA.id, createdAt: new Date(), sold_price: 10, buy_price: 10 },
-        { order_id: order1.id, product_id: productB.id, createdAt: new Date(), sold_price: 10, buy_price: 10 },
+        {
+          order_id: order1.id,
+          product_id: productA.id,
+          createdAt: new Date(),
+          sold_price: 10,
+          buy_price: 10,
+        },
+        {
+          order_id: order2.id,
+          product_id: productA.id,
+          createdAt: new Date(),
+          sold_price: 10,
+          buy_price: 10,
+        },
+        {
+          order_id: order1.id,
+          product_id: productB.id,
+          createdAt: new Date(),
+          sold_price: 10,
+          buy_price: 10,
+        },
       ],
     });
   });

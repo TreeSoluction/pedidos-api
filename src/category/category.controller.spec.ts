@@ -44,14 +44,18 @@ describe('CategoryController', () => {
   });
 
   it('should find one category', async () => {
-    const category = await prisma.category.create({ data: { name: 'Test Category' } });
+    const category = await prisma.category.create({
+      data: { name: 'Test Category' },
+    });
     const foundCategory = await controller.findOne(category.id);
     if (foundCategory == null) fail();
     expect(foundCategory.id).toBe(category.id);
   });
 
   it('should update a category', async () => {
-    const category = await prisma.category.create({ data: { name: 'Test Category' } });
+    const category = await prisma.category.create({
+      data: { name: 'Test Category' },
+    });
     const dto: Prisma.categoryUpdateInput = { name: 'Updated Category' };
     const updatedCategory = await prisma.category.update({
       where: { id: category.id },
@@ -61,7 +65,9 @@ describe('CategoryController', () => {
   });
 
   it('should delete a category', async () => {
-    const category = await prisma.category.create({ data: { name: 'Test Category' } });
+    const category = await prisma.category.create({
+      data: { name: 'Test Category' },
+    });
     await prisma.category.delete({ where: { id: category.id } });
     const deletedCategory = await prisma.category.findUnique({
       where: { id: category.id },

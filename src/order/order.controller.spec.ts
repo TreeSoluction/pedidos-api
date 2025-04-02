@@ -30,8 +30,15 @@ describe('OrderController', () => {
   });
 
   it('should create an order', async () => {
-    const category = await prisma.category.create({ data: { name: "Teste", } })
-    const product = await prisma.product.create({ data: { name: "Teste", category_id: category.id, sold_price: 10, buy_price: 10 } })
+    const category = await prisma.category.create({ data: { name: 'Teste' } });
+    const product = await prisma.product.create({
+      data: {
+        name: 'Teste',
+        category_id: category.id,
+        sold_price: 10,
+        buy_price: 10,
+      },
+    });
     const dto: Prisma.orderCreateInput = {
       name: 'Test Order',
       address: '123 Test St',
@@ -40,8 +47,8 @@ describe('OrderController', () => {
           {
             buy_price: product.buy_price,
             sold_price: product.sold_price,
-            product_id: product.id
-          }
+            product_id: product.id,
+          },
         ],
       },
     };
@@ -66,19 +73,24 @@ describe('OrderController', () => {
   it('should update an order', async () => {
     const order = await prisma.order.findFirstOrThrow();
     const dto: Prisma.orderUpdateInput = { name: 'Updated Order' };
-    const updatedOrder = await prisma.order.update({ where: { id: order.id }, data: dto });
+    const updatedOrder = await prisma.order.update({
+      where: { id: order.id },
+      data: dto,
+    });
     expect(updatedOrder.name).toBe(dto.name);
   });
 
   it('should delete an order', async () => {
     await prisma.order.create({
-      data: {
-
-      }
-    })
-    const order = await prisma.order.findFirstOrThrow({ orderBy: { createdAt: "desc" } });
+      data: {},
+    });
+    const order = await prisma.order.findFirstOrThrow({
+      orderBy: { createdAt: 'desc' },
+    });
     await prisma.order.delete({ where: { id: order.id } });
-    const deletedOrder = await prisma.order.findUnique({ where: { id: order.id } });
+    const deletedOrder = await prisma.order.findUnique({
+      where: { id: order.id },
+    });
     expect(deletedOrder).toBeNull();
   });
 });

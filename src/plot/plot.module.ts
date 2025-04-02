@@ -4,6 +4,6 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
   controllers: [PlotController],
-  providers: [PrismaService]
+  providers: [PrismaService],
 })
-export class PlotModule { }
+export class PlotModule {}
