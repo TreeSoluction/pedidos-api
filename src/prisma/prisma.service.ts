@@ -18,7 +18,7 @@ export class PrismaService
     this.$use(async (params, next) => {
       if (params.model === 'products' && ['findMany', 'findUnique', 'create', 'update'].includes(params.action)) {
         const result = await next(params);
-
+        
         const computeBuyPrice = async (product) => {
           const ingredients = await this.product_ingredients.findMany({
             where: { product_id: product.id },

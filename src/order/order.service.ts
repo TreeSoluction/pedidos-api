@@ -18,8 +18,8 @@ export class OrderService {
           create: await Promise.all(
             data.items.map(async (item) => {
               const product = await this.prisma.products.findUnique({
-                where: { id: item.id },
-                select: { buy_price: true, sold_price: true, id: true },
+                where: { id: item.create.product.connect.id },
+                include: { product_ingredients: true }
               });
 
               if (!product) {

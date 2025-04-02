@@ -1,6 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-
+interface DailyProfit {
+  day: number;
+  total_cost: number;
+  total_sold: number;
+}
 @Controller('plots')
 export class PlotController {
   constructor(private readonly prismaService: PrismaService) { }
@@ -71,6 +75,48 @@ export class PlotController {
       thisWeek: productCountThisWeek.get(name) || 0,
       lastWeek: productCountLastWeek.get(name) || 0,
     }));
+  }
+
+  @Get('weekprofit')
+  async getWeeklyProfit(): Promise<DailyProfit[]> {
+    const now = new Date();
+
+    const weeklyProfit: DailyProfit[] = [];
+
+    for (let i = 0; i < 7; i++) {
+      const startOfDay = new Date(now);
+      startOfDay.setDate(now.getDate() - (now.getDay() - i));
+      startOfDay.setUTCHours(3, 0);
+
+      const endOfDay = new Date(startOfDay);
+      endOfDay.setHours(26, 59);
+
+      const items = await this.prismaService.order_items.findMany({
+        where: {
+          createdAt: {
+            gte: startOfDay,
+            lte: endOfDay,
+          },
+        },
+        include: { product: true },
+      });
+
+      let total_cost = 0;
+      let total_sold = 0;
+
+      items.forEach(element => {
+        total_sold += element.sold_price;
+        total_cost += element.buy_price;
+      });
+
+      weeklyProfit.push({
+        day: i,
+        total_cost,
+        total_sold,
+      });
+    }
+
+    return weeklyProfit;
   }
 
   @Get('daysold/product')
