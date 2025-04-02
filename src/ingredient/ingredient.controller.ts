@@ -17,10 +17,12 @@ export class IngredientController {
 
   @Post()
   async create(@Body() createIngredientDto: Prisma.ingredientsCreateInput) {
-    if (await this.ingredientService.alreadyExist(createIngredientDto))
-      return new BadRequestException("Ja existe");
+    if (await this.ingredientService.alreadyExist(createIngredientDto)) {
+      throw new BadRequestException("Ja existe");
+    }
     return this.ingredientService.create(createIngredientDto);
   }
+
 
   @Get()
   findAll() {
