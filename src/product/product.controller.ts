@@ -12,7 +12,7 @@ import { Prisma } from '@prisma/client';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
   @Post()
   async create(@Body() createProductDto: Prisma.productsCreateInput) {

@@ -4,7 +4,7 @@ import { categories, Prisma } from '@prisma/client';
 
 @Injectable()
 export class CategoryService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.categoriesCreateInput): Promise<categories> {
     return this.prisma.categories.create({ data });

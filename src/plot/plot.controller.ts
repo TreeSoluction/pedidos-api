@@ -1,10 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Controller('plots')
 export class PlotController {
-  constructor(private readonly prismaService: PrismaService) { }
-
+  constructor(private readonly prismaService: PrismaService) {}
 
   @Get('weeksold/trending-products')
   async getTrendingProducts() {
@@ -38,7 +45,10 @@ export class PlotController {
     for (const item of itemsThisWeek) {
       if (item.product) {
         const name = item.product.name;
-        productCountThisWeek.set(name, (productCountThisWeek.get(name) || 0) + 1);
+        productCountThisWeek.set(
+          name,
+          (productCountThisWeek.get(name) || 0) + 1,
+        );
       }
     }
 
@@ -62,7 +72,10 @@ export class PlotController {
     for (const item of itemsLastWeek) {
       if (item.product) {
         const name = item.product.name;
-        productCountLastWeek.set(name, (productCountLastWeek.get(name) || 0) + 1);
+        productCountLastWeek.set(
+          name,
+          (productCountLastWeek.get(name) || 0) + 1,
+        );
       }
     }
 
@@ -98,7 +111,10 @@ export class PlotController {
     for (const item of items) {
       if (item.product) {
         const productName = item.product.name;
-        productCountMap.set(productName, (productCountMap.get(productName) || 0) + 1);
+        productCountMap.set(
+          productName,
+          (productCountMap.get(productName) || 0) + 1,
+        );
       }
     }
 
@@ -132,7 +148,10 @@ export class PlotController {
     for (const item of items) {
       if (item.product) {
         const productName = item.product.name;
-        productCountMap.set(productName, (productCountMap.get(productName) || 0) + 1);
+        productCountMap.set(
+          productName,
+          (productCountMap.get(productName) || 0) + 1,
+        );
       }
     }
 
@@ -183,7 +202,7 @@ export class PlotController {
             lte: endOfDay,
           },
         },
-      })
-    }
+      }),
+    };
   }
 }

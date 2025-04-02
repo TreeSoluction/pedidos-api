@@ -12,7 +12,7 @@ import { Prisma } from '@prisma/client';
 
 @Controller('categories')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) { }
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
   create(@Body() createCategoryDto: Prisma.categoriesCreateInput) {

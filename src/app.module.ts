@@ -9,7 +9,13 @@ import { PlotModule } from './plot/plot.module';
 import { IngredientModule } from './ingredient/ingredient.module';
 
 @Module({
-  imports: [ProductModule, CategoryModule, OrderModule, PlotModule, IngredientModule],
+  imports: [
+    ProductModule,
+    CategoryModule,
+    OrderModule,
+    PlotModule,
+    IngredientModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
