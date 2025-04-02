@@ -4,7 +4,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class IngredientService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
+
+  async alreadyExist(createIngredientDto: Prisma.ingredientsCreateInput): Promise<boolean> {
+    return (await this.prisma.ingredients.findFirst({ where: { name: createIngredientDto.name } }) != null);
+  }
 
   async create(createIngredientDto: Prisma.ingredientsCreateInput) {
     return await this.prisma.ingredients.create({ data: createIngredientDto });

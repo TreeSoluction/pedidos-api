@@ -6,16 +6,19 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
 import { Prisma } from '@prisma/client';
 
 @Controller('ingredients')
 export class IngredientController {
-  constructor(private readonly ingredientService: IngredientService) {}
+  constructor(private readonly ingredientService: IngredientService) { }
 
   @Post()
-  create(@Body() createIngredientDto: Prisma.ingredientsCreateInput) {
+  async create(@Body() createIngredientDto: Prisma.ingredientsCreateInput) {
+    if (await this.ingredientService.alreadyExist(createIngredientDto))
+      return new BadRequestException("Ja existe");
     return this.ingredientService.create(createIngredientDto);
   }
 
