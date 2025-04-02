@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(data: Prisma.ordersCreateInput): Promise<orders> {
     if (!Array.isArray(data.items)) {
@@ -27,6 +27,7 @@ export class OrderService {
               }
 
               return {
+                observation: item.create.observation,
                 sold_price: product.sold_price,
                 buy_price: product.buy_price,
                 product: { connect: { id: product.id } },
