@@ -15,7 +15,7 @@ interface DailyProfit {
 }
 @Controller('plots')
 export class PlotController {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   @Get('weeksold/trending-products')
   async getTrendingProducts() {
@@ -233,35 +233,30 @@ export class PlotController {
   async getDay() {
     const now = new Date();
 
-    const startOfDay = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        0,
-        0,
-        0,
-      ),
-    );
+    const startOfDayBRT = new Date(Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      3,
+      0
+    ));
 
-    const endOfDay = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        23,
-        59,
-        59,
-      ),
-    );
+    const endOfDayBRT = new Date(Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      26,
+      59,
+      59
+    ));
 
     return {
       goal: 20,
       reach: await this.prismaService.orders.count({
         where: {
           createdAt: {
-            gte: startOfDay,
-            lte: endOfDay,
+            gte: startOfDayBRT,
+            lte: endOfDayBRT,
           },
         },
       }),
