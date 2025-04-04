@@ -8,12 +8,13 @@ datasource db {
 }
 
 model orders {
-  id        String        @id @default(uuid())
-  name      String?
-  address   String?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  items     order_items[]
+  id           String        @id @default(uuid())
+  order_number Int           @default(autoincrement())
+  name         String?
+  address      String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  items        order_items[]
 }
 
 model ingredients {

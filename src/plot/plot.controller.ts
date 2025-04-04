@@ -117,7 +117,7 @@ export class PlotController {
       let total_cost = 0;
       let total_sold = 0;
 
-      items.forEach(element => {
+      items.forEach((element) => {
         total_sold += element.sold_price;
         total_cost += element.buy_price;
       });
@@ -233,11 +233,27 @@ export class PlotController {
   async getDay() {
     const now = new Date();
 
-    const startOfDay = new Date(now);
-    startOfDay.setUTCHours(3, 0);
+    const startOfDay = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        0,
+        0,
+        0,
+      ),
+    );
 
-    const endOfDay = new Date(now);
-    endOfDay.setHours(26, 59);
+    const endOfDay = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        23,
+        59,
+        59,
+      ),
+    );
 
     return {
       goal: 20,
