@@ -97,18 +97,27 @@ export class PlotController {
     const weeklyProfit: DailyProfit[] = [];
 
     for (let i = 0; i < 7; i++) {
-      const startOfDay = new Date(now);
-      startOfDay.setDate(now.getDate() - (now.getDay() - i));
-      startOfDay.setUTCHours(3, 0);
+      const startOfDayBRT = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        0, 0, 0
+      );
+      startOfDayBRT.setHours(startOfDayBRT.getHours() - 3);
 
-      const endOfDay = new Date(startOfDay);
-      endOfDay.setHours(26, 59);
+      const endOfDayBRT = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        23, 59, 59
+      );
+      endOfDayBRT.setHours(endOfDayBRT.getHours() - 3);
 
       const items = await this.prismaService.order_items.findMany({
         where: {
           createdAt: {
-            gte: startOfDay,
-            lte: endOfDay,
+            gte: startOfDayBRT,
+            lte: endOfDayBRT,
           },
         },
         include: { product: true },
@@ -208,21 +217,29 @@ export class PlotController {
   async getWeek() {
     const now = new Date();
 
-    const startOfWeek = new Date(now);
-    startOfWeek.setUTCDate(now.getUTCDate() - now.getUTCDay());
-    startOfWeek.setUTCHours(3, 0);
+    const startOfDayBRT = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0, 0, 0
+    );
+    startOfDayBRT.setHours(startOfDayBRT.getHours() - 3);
 
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
-    endOfWeek.setUTCHours(26, 59);
+    const endOfDayBRT = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23, 59, 59
+    );
+    endOfDayBRT.setHours(endOfDayBRT.getHours() - 3);
 
     return {
       goal: 100,
       reach: await this.prismaService.orders.count({
         where: {
           createdAt: {
-            gte: startOfWeek,
-            lte: endOfWeek,
+            gte: startOfDayBRT,
+            lte: endOfDayBRT,
           },
         },
       }),
