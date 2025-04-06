@@ -93,31 +93,27 @@ export class PlotController {
   @Get('weekprofit')
   async getWeeklyProfit(): Promise<DailyProfit[]> {
     const now = new Date();
-
     const weeklyProfit: DailyProfit[] = [];
 
-    for (let i = 0; i < 7; i++) {
-      const startOfDayBRT = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        0, 0, 0
-      );
-      startOfDayBRT.setHours(startOfDayBRT.getHours() - 3);
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
 
-      const endOfDayBRT = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        23, 59, 59
-      );
-      endOfDayBRT.setHours(endOfDayBRT.getHours() - 3);
+    for (let i = 0; i < 7; i++) {
+      const currentDay = new Date(startOfWeek);
+      currentDay.setDate(startOfWeek.getDate() + i);
+
+      const startOfDay = new Date(currentDay);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(currentDay);
+      endOfDay.setHours(23, 59, 59, 999);
 
       const items = await this.prismaService.order_items.findMany({
         where: {
           createdAt: {
-            gte: startOfDayBRT,
-            lte: endOfDayBRT,
+            gte: startOfDay,
+            lte: endOfDay,
           },
         },
         include: { product: true },
@@ -217,32 +213,32 @@ export class PlotController {
   async getWeek() {
     const now = new Date();
 
-    const startOfDayBRT = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      0, 0, 0
-    );
-    startOfDayBRT.setHours(startOfDayBRT.getHours() - 3);
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
 
-    const endOfDayBRT = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      23, 59, 59
-    );
-    endOfDayBRT.setHours(endOfDayBRT.getHours() - 3);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    const startOfWeekBRT = new Date(startOfWeek);
+    startOfWeekBRT.setHours(startOfWeekBRT.getHours() + 3);
+
+    const endOfWeekBRT = new Date(endOfWeek);
+    endOfWeekBRT.setHours(endOfWeekBRT.getHours() + 3);
+
+    const weeklyCount = await this.prismaService.orders.count({
+      where: {
+        createdAt: {
+          gte: startOfWeekBRT,
+          lte: endOfWeekBRT,
+        },
+      },
+    });
 
     return {
-      goal: 100,
-      reach: await this.prismaService.orders.count({
-        where: {
-          createdAt: {
-            gte: startOfDayBRT,
-            lte: endOfDayBRT,
-          },
-        },
-      }),
+      goal: 200,
+      reach: weeklyCount,
     };
   }
 
