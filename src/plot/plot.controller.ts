@@ -233,33 +233,34 @@ export class PlotController {
   async getDay() {
     const now = new Date();
 
-    const startOfDayBRT = new Date(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      3,
-      0
-    ));
+    const startOfDayBRT = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0, 0, 0
+    );
+    startOfDayBRT.setHours(startOfDayBRT.getHours() - 3);
 
-    const endOfDayBRT = new Date(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      26,
-      59,
-      59
-    ));
+    const endOfDayBRT = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23, 59, 59
+    );
+    endOfDayBRT.setHours(endOfDayBRT.getHours() - 3);
+
+    const totalCount = await this.prismaService.orders.count({
+      where: {
+        createdAt: {
+          gte: startOfDayBRT,
+          lte: endOfDayBRT,
+        },
+      },
+    })
 
     return {
       goal: 20,
-      reach: await this.prismaService.orders.count({
-        where: {
-          createdAt: {
-            gte: startOfDayBRT,
-            lte: endOfDayBRT,
-          },
-        },
-      }),
-    };
+      reach: totalCount
+    }
   }
 }
