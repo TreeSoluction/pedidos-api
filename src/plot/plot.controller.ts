@@ -214,7 +214,9 @@ export class PlotController {
     const now = new Date();
 
     const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay());
+    const dayOfWeek = now.getDay(); 
+    const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    startOfWeek.setDate(now.getDate() - diff);
     startOfWeek.setHours(0, 0, 0, 0);
 
     const endOfWeek = new Date(startOfWeek);
