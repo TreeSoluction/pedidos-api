@@ -35,9 +35,6 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
-      timezone:
-        specifier: ^1.0.23
-        version: 1.0.23
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.2.0
@@ -3320,9 +3317,6 @@ packages:
 
   through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
-
-  timezone@1.0.23:
-    resolution: {integrity: sha512-yhQgk6qmSLB+TF8HGmApZAVI5bfzR1CoKUGr+WMZWmx75ED1uDewAZA8QMGCQ70TEv4GmM8pDB9jrHuxdaQ1PA==}
 
   tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
@@ -7149,8 +7143,6 @@ snapshots:
       b4a: 1.6.7
 
   through@2.3.8: {}
-
-  timezone@1.0.23: {}
 
   tmp@0.0.33:
     dependencies:

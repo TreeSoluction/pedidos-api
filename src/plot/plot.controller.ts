@@ -19,78 +19,78 @@ interface DailyProfit {
 export class PlotController {
   constructor(private readonly prismaService: PrismaService) { }
 
-  @Get('weeksold/trending-products')
-  async getTrendingProducts() {
-    const now = new Date();
+  // @Get('weeksold/trending-products')
+  // async getTrendingProducts() {
+  //   const now = new Date();
 
-    const startOfThisWeek = new Date(now);
-    startOfThisWeek.setUTCDate(now.getUTCDate() - now.getUTCDay());
-    startOfThisWeek.setUTCHours(3, 0, 0, 0);
+  //   const startOfThisWeek = new Date(now);
+  //   startOfThisWeek.setUTCDate(now.getUTCDate() - now.getUTCDay());
+  //   startOfThisWeek.setUTCHours(3, 0, 0, 0);
 
-    const endOfThisWeek = new Date(startOfThisWeek);
-    endOfThisWeek.setUTCDate(startOfThisWeek.getUTCDate() + 6);
-    endOfThisWeek.setUTCHours(26, 59, 59, 999);
+  //   const endOfThisWeek = new Date(startOfThisWeek);
+  //   endOfThisWeek.setUTCDate(startOfThisWeek.getUTCDate() + 6);
+  //   endOfThisWeek.setUTCHours(26, 59, 59, 999);
 
-    const startOfLastWeek = new Date(startOfThisWeek);
-    startOfLastWeek.setUTCDate(startOfThisWeek.getUTCDate() - 7);
+  //   const startOfLastWeek = new Date(startOfThisWeek);
+  //   startOfLastWeek.setUTCDate(startOfThisWeek.getUTCDate() - 7);
 
-    const endOfLastWeek = new Date(endOfThisWeek);
-    endOfLastWeek.setUTCDate(endOfThisWeek.getUTCDate() - 7);
+  //   const endOfLastWeek = new Date(endOfThisWeek);
+  //   endOfLastWeek.setUTCDate(endOfThisWeek.getUTCDate() - 7);
 
-    const itemsThisWeek = await this.prismaService.order_items.findMany({
-      where: {
-        createdAt: {
-          gte: startOfThisWeek,
-          lte: endOfThisWeek,
-        },
-      },
-      include: { product: true },
-    });
+  //   const itemsThisWeek = await this.prismaService.order_items.findMany({
+  //     where: {
+  //       createdAt: {
+  //         gte: startOfThisWeek,
+  //         lte: endOfThisWeek,
+  //       },
+  //     },
+  //     include: { product: true },
+  //   });
 
-    const productCountThisWeek = new Map();
-    for (const item of itemsThisWeek) {
-      if (item.product) {
-        const name = item.product.name;
-        productCountThisWeek.set(
-          name,
-          (productCountThisWeek.get(name) || 0) + 1,
-        );
-      }
-    }
+  //   const productCountThisWeek = new Map();
+  //   for (const item of itemsThisWeek) {
+  //     if (item.product) {
+  //       const name = item.product.name;
+  //       productCountThisWeek.set(
+  //         name,
+  //         (productCountThisWeek.get(name) || 0) + 1,
+  //       );
+  //     }
+  //   }
 
-    const topProducts = Array.from(productCountThisWeek.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([name]) => name);
+  //   const topProducts = Array.from(productCountThisWeek.entries())
+  //     .sort((a, b) => b[1] - a[1])
+  //     .slice(0, 3)
+  //     .map(([name]) => name);
 
-    const itemsLastWeek = await this.prismaService.order_items.findMany({
-      where: {
-        createdAt: {
-          gte: startOfLastWeek,
-          lte: endOfLastWeek,
-        },
-        product: { name: { in: topProducts } },
-      },
-      include: { product: true },
-    });
+  //   const itemsLastWeek = await this.prismaService.order_items.findMany({
+  //     where: {
+  //       createdAt: {
+  //         gte: startOfLastWeek,
+  //         lte: endOfLastWeek,
+  //       },
+  //       product: { name: { in: topProducts } },
+  //     },
+  //     include: { product: true },
+  //   });
 
-    const productCountLastWeek = new Map();
-    for (const item of itemsLastWeek) {
-      if (item.product) {
-        const name = item.product.name;
-        productCountLastWeek.set(
-          name,
-          (productCountLastWeek.get(name) || 0) + 1,
-        );
-      }
-    }
+  //   const productCountLastWeek = new Map();
+  //   for (const item of itemsLastWeek) {
+  //     if (item.product) {
+  //       const name = item.product.name;
+  //       productCountLastWeek.set(
+  //         name,
+  //         (productCountLastWeek.get(name) || 0) + 1,
+  //       );
+  //     }
+  //   }
 
-    return topProducts.map((name) => ({
-      name,
-      thisWeek: productCountThisWeek.get(name) || 0,
-      lastWeek: productCountLastWeek.get(name) || 0,
-    }));
-  }
+  //   return topProducts.map((name) => ({
+  //     name,
+  //     thisWeek: productCountThisWeek.get(name) || 0,
+  //     lastWeek: productCountLastWeek.get(name) || 0,
+  //   }));
+  // }
 
   @Get('weekprofit')
   async getWeeklyProfit(): Promise<DailyProfit[]> {
