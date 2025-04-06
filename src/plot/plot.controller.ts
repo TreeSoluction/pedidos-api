@@ -8,6 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import * as moment from 'moment-timezone';
+
 interface DailyProfit {
   day: number;
   total_cost: number;
@@ -92,28 +94,26 @@ export class PlotController {
 
   @Get('weekprofit')
   async getWeeklyProfit(): Promise<DailyProfit[]> {
-    const now = new Date();
+    const timezone = 'America/Sao_Paulo';
+    const now = moment().tz(timezone);
+
+    let startOfWeek = now.clone().startOf('week').add(1, 'day').startOf('day');
+    if (now.day() === 0) {
+      startOfWeek = now.clone().subtract(6, 'days').startOf('day');
+    }
+
     const weeklyProfit: DailyProfit[] = [];
 
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
-
     for (let i = 0; i < 7; i++) {
-      const currentDay = new Date(startOfWeek);
-      currentDay.setDate(startOfWeek.getDate() + i);
-
-      const startOfDay = new Date(currentDay);
-      startOfDay.setHours(0, 0, 0, 0);
-
-      const endOfDay = new Date(currentDay);
-      endOfDay.setHours(23, 59, 59, 999);
+      const currentDay = startOfWeek.clone().add(i, 'days');
+      const startOfDay = currentDay.clone().startOf('day');
+      const endOfDay = currentDay.clone().endOf('day');
 
       const items = await this.prismaService.order_items.findMany({
         where: {
           createdAt: {
-            gte: startOfDay,
-            lte: endOfDay,
+            gte: startOfDay.toDate(),
+            lte: endOfDay.toDate(),
           },
         },
         include: { product: true },
@@ -137,103 +137,96 @@ export class PlotController {
     return weeklyProfit;
   }
 
-  @Get('daysold/product')
-  async getDayProduct() {
-    const now = new Date();
+  // @Get('daysold/product')
+  // async getDayProduct() {
+  //   const now = new Date();
 
-    const startOfDay = new Date(now);
-    startOfDay.setUTCHours(3, 0);
+  //   const startOfDay = new Date(now);
+  //   startOfDay.setUTCHours(3, 0);
 
-    const endOfDay = new Date(now);
-    endOfDay.setHours(26, 59);
+  //   const endOfDay = new Date(now);
+  //   endOfDay.setHours(26, 59);
 
-    const items = await this.prismaService.order_items.findMany({
-      where: {
-        createdAt: {
-          gte: startOfDay,
-          lte: endOfDay,
-        },
-      },
-      include: { product: true },
-    });
+  //   const items = await this.prismaService.order_items.findMany({
+  //     where: {
+  //       createdAt: {
+  //         gte: startOfDay,
+  //         lte: endOfDay,
+  //       },
+  //     },
+  //     include: { product: true },
+  //   });
 
-    const productCountMap = new Map();
+  //   const productCountMap = new Map();
 
-    for (const item of items) {
-      if (item.product) {
-        const productName = item.product.name;
-        productCountMap.set(
-          productName,
-          (productCountMap.get(productName) || 0) + 1,
-        );
-      }
-    }
+  //   for (const item of items) {
+  //     if (item.product) {
+  //       const productName = item.product.name;
+  //       productCountMap.set(
+  //         productName,
+  //         (productCountMap.get(productName) || 0) + 1,
+  //       );
+  //     }
+  //   }
 
-    return Array.from(productCountMap, ([name, count]) => ({ name, count }));
-  }
+  //   return Array.from(productCountMap, ([name, count]) => ({ name, count }));
+  // }
 
-  @Get('weeksold/product')
-  async getWeekProduct() {
-    const now = new Date();
+  // @Get('weeksold/product')
+  // async getWeekProduct() {
+  //   const now = new Date();
 
-    const startOfWeek = new Date(now);
-    startOfWeek.setUTCDate(now.getUTCDate() - now.getUTCDay());
-    startOfWeek.setUTCHours(3, 0);
+  //   const startOfWeek = new Date(now);
+  //   startOfWeek.setUTCDate(now.getUTCDate() - now.getUTCDay());
+  //   startOfWeek.setUTCHours(3, 0);
 
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
-    endOfWeek.setUTCHours(26, 59);
+  //   const endOfWeek = new Date(startOfWeek);
+  //   endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
+  //   endOfWeek.setUTCHours(26, 59);
 
-    const items = await this.prismaService.order_items.findMany({
-      where: {
-        createdAt: {
-          gte: startOfWeek,
-          lte: endOfWeek,
-        },
-      },
-      include: { product: true },
-    });
+  //   const items = await this.prismaService.order_items.findMany({
+  //     where: {
+  //       createdAt: {
+  //         gte: startOfWeek,
+  //         lte: endOfWeek,
+  //       },
+  //     },
+  //     include: { product: true },
+  //   });
 
-    const productCountMap = new Map();
+  //   const productCountMap = new Map();
 
-    for (const item of items) {
-      if (item.product) {
-        const productName = item.product.name;
-        productCountMap.set(
-          productName,
-          (productCountMap.get(productName) || 0) + 1,
-        );
-      }
-    }
+  //   for (const item of items) {
+  //     if (item.product) {
+  //       const productName = item.product.name;
+  //       productCountMap.set(
+  //         productName,
+  //         (productCountMap.get(productName) || 0) + 1,
+  //       );
+  //     }
+  //   }
 
-    return Array.from(productCountMap, ([name, count]) => ({ name, count }));
-  }
+  //   return Array.from(productCountMap, ([name, count]) => ({ name, count }));
+  // }
 
   @Get('weeksold')
   async getWeek() {
-    const now = new Date();
+    const timezone = 'America/Sao_Paulo';
 
-    const startOfWeek = new Date(now);
-    const dayOfWeek = now.getDay(); 
-    const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    startOfWeek.setDate(now.getDate() - diff);
-    startOfWeek.setHours(0, 0, 0, 0);
+    const now = moment().tz(timezone);
 
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
-    endOfWeek.setHours(23, 59, 59, 999);
+    const startOfWeek = now.clone().startOf('week').add(1, 'day').startOf('day');
+    if (now.day() === 0) {
+      startOfWeek.subtract(7, 'days');
+    }
 
-    const startOfWeekBRT = new Date(startOfWeek);
-    startOfWeekBRT.setHours(startOfWeekBRT.getHours() + 3);
-
-    const endOfWeekBRT = new Date(endOfWeek);
-    endOfWeekBRT.setHours(endOfWeekBRT.getHours() + 3);
+    const endOfWeek = startOfWeek.clone().add(6, 'days').endOf('day');
 
     const weeklyCount = await this.prismaService.orders.count({
       where: {
         createdAt: {
-          gte: startOfWeekBRT,
-          lte: endOfWeekBRT,
+          gte: startOfWeek.toDate(),
+          lte: endOfWeek.toDate(),
         },
       },
     });
@@ -246,36 +239,24 @@ export class PlotController {
 
   @Get('diarysold')
   async getDay() {
-    const now = new Date();
+    const timezone = 'America/Sao_Paulo';
 
-    const startOfDayBRT = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      0, 0, 0
-    );
-    startOfDayBRT.setHours(startOfDayBRT.getHours() - 3);
+    const now = moment().tz(timezone);
+    const startOfDayBRT = now.clone().startOf('day').toDate();
+    const endOfDayBRT = now.clone().endOf('day').toDate();
 
-    const endOfDayBRT = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      23, 59, 59
-    );
-    endOfDayBRT.setHours(endOfDayBRT.getHours() - 3);
-
-    const totalCount = await this.prismaService.orders.count({
+    const reach = await this.prismaService.orders.count({
       where: {
         createdAt: {
           gte: startOfDayBRT,
           lte: endOfDayBRT,
         },
       },
-    })
+    });
 
     return {
       goal: 20,
-      reach: totalCount
-    }
+      reach,
+    };
   }
 }
