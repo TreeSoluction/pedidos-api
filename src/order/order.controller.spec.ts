@@ -19,8 +19,8 @@ describe('OrderController', () => {
   });
 
   afterAll(async () => {
-    await prisma.order_item.deleteMany();
-    await prisma.order.deleteMany();
+    await prisma.order_items.deleteMany();
+    await prisma.orders.deleteMany();
     await prisma.$disconnect();
   });
 
@@ -30,8 +30,8 @@ describe('OrderController', () => {
   });
 
   it('should create an order', async () => {
-    const category = await prisma.category.create({ data: { name: 'Teste' } });
-    const product = await prisma.product.create({
+    const category = await prisma.categories.create({ data: { name: 'Teste' } });
+    const product = await prisma.products.create({
       data: {
         name: 'Teste',
         category_id: category.id,
@@ -39,7 +39,7 @@ describe('OrderController', () => {
         buy_price: 10,
       },
     });
-    const dto: Prisma.orderCreateInput = {
+    const dto: Prisma.ordersCreateInput = {
       name: 'Test Order',
       address: '123 Test St',
       items: {
@@ -53,27 +53,27 @@ describe('OrderController', () => {
       },
     };
 
-    const order = await prisma.order.create({ data: dto });
+    const order = await prisma.orders.create({ data: dto });
     expect(order).toHaveProperty('id');
     expect(order.name).toBe(dto.name);
   });
 
   it('should find all orders', async () => {
-    const orders = await prisma.order.findMany();
+    const orders = await prisma.orders.findMany();
     expect(orders.length).toBeGreaterThan(0);
   });
 
   it('should find one order', async () => {
-    const order = await prisma.order.findFirstOrThrow();
+    const order = await prisma.orders.findFirstOrThrow();
     const foundOrder = await controller.findOne(order.id);
     if (foundOrder == null) fail();
     expect(foundOrder.id).toBe(order.id);
   });
 
   it('should update an order', async () => {
-    const order = await prisma.order.findFirstOrThrow();
-    const dto: Prisma.orderUpdateInput = { name: 'Updated Order' };
-    const updatedOrder = await prisma.order.update({
+    const order = await prisma.orders.findFirstOrThrow();
+    const dto: Prisma.ordersUpdateInput = { name: 'Updated Order' };
+    const updatedOrder = await prisma.orders.update({
       where: { id: order.id },
       data: dto,
     });
@@ -81,14 +81,14 @@ describe('OrderController', () => {
   });
 
   it('should delete an order', async () => {
-    await prisma.order.create({
+    await prisma.orders.create({
       data: {},
     });
-    const order = await prisma.order.findFirstOrThrow({
+    const order = await prisma.orders.findFirstOrThrow({
       orderBy: { createdAt: 'desc' },
     });
-    await prisma.order.delete({ where: { id: order.id } });
-    const deletedOrder = await prisma.order.findUnique({
+    await prisma.orders.delete({ where: { id: order.id } });
+    const deletedOrder = await prisma.orders.findUnique({
       where: { id: order.id },
     });
     expect(deletedOrder).toBeNull();

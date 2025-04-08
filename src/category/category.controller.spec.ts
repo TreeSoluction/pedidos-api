@@ -19,8 +19,8 @@ describe('CategoryController', () => {
   });
 
   afterAll(async () => {
-    await prisma.product.deleteMany();
-    await prisma.category.deleteMany();
+    await prisma.products.deleteMany();
+    await prisma.categories.deleteMany();
     await prisma.$disconnect();
   });
 
@@ -30,21 +30,21 @@ describe('CategoryController', () => {
   });
 
   it('should create a category', async () => {
-    const dto: Prisma.categoryCreateInput = { name: 'Test Category' };
-    const category = await prisma.category.create({ data: dto });
+    const dto: Prisma.categoriesCreateInput = { name: 'Test Category' };
+    const category = await prisma.categories.create({ data: dto });
     expect(category).toHaveProperty('id');
     expect(category.name).toBe(dto.name);
   });
 
   it('should find all categories', async () => {
-    await prisma.category.create({ data: { name: 'Test Category 1' } });
-    await prisma.category.create({ data: { name: 'Test Category 2' } });
-    const categories = await prisma.category.findMany();
+    await prisma.categories.create({ data: { name: 'Test Category 1' } });
+    await prisma.categories.create({ data: { name: 'Test Category 2' } });
+    const categories = await prisma.categories.findMany();
     expect(categories.length).toBeGreaterThan(0);
   });
 
   it('should find one category', async () => {
-    const category = await prisma.category.create({
+    const category = await prisma.categories.create({
       data: { name: 'Test Category' },
     });
     const foundCategory = await controller.findOne(category.id);
@@ -53,11 +53,11 @@ describe('CategoryController', () => {
   });
 
   it('should update a category', async () => {
-    const category = await prisma.category.create({
+    const category = await prisma.categories.create({
       data: { name: 'Test Category' },
     });
-    const dto: Prisma.categoryUpdateInput = { name: 'Updated Category' };
-    const updatedCategory = await prisma.category.update({
+    const dto: Prisma.categoriesUpdateInput = { name: 'Updated Category' };
+    const updatedCategory = await prisma.categories.update({
       where: { id: category.id },
       data: dto,
     });
@@ -65,11 +65,11 @@ describe('CategoryController', () => {
   });
 
   it('should delete a category', async () => {
-    const category = await prisma.category.create({
+    const category = await prisma.categories.create({
       data: { name: 'Test Category' },
     });
-    await prisma.category.delete({ where: { id: category.id } });
-    const deletedCategory = await prisma.category.findUnique({
+    await prisma.categories.delete({ where: { id: category.id } });
+    const deletedCategory = await prisma.categories.findUnique({
       where: { id: category.id },
     });
     expect(deletedCategory).toBeNull();

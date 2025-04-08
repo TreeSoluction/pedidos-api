@@ -17,6 +17,14 @@ model orders {
   items        order_items[]
 }
 
+model expenses {
+  id        String   @id @default(uuid())
+  price     Float
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model ingredients {
   id                  String                @id @default(uuid())
   name                String

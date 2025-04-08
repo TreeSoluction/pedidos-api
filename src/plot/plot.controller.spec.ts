@@ -18,26 +18,26 @@ describe('PlotController (e2e)', () => {
 
     await app.init();
 
-    await prisma.order_item.deleteMany();
-    await prisma.order.deleteMany();
-    await prisma.product.deleteMany();
-    const category = await prisma.category.create({ data: { name: 'Teste' } });
+    await prisma.order_items.deleteMany();
+    await prisma.orders.deleteMany();
+    await prisma.products.deleteMany();
+    const category = await prisma.categories.create({ data: { name: 'Teste' } });
 
-    const productA = await prisma.product.create({
+    const productA = await prisma.products.create({
       data: { name: 'Produto A', category_id: category.id },
     });
-    const productB = await prisma.product.create({
+    const productB = await prisma.products.create({
       data: { name: 'Produto B', category_id: category.id },
     });
 
-    const order1 = await prisma.order.create({
+    const order1 = await prisma.orders.create({
       data: { createdAt: new Date() },
     });
-    const order2 = await prisma.order.create({
+    const order2 = await prisma.orders.create({
       data: { createdAt: new Date() },
     });
 
-    await prisma.order_item.createMany({
+    await prisma.order_items.createMany({
       data: [
         {
           order_id: order1.id,
@@ -66,9 +66,9 @@ describe('PlotController (e2e)', () => {
 
   afterAll(async () => {
     // Limpa os dados após os testes
-    await prisma.order_item.deleteMany();
-    await prisma.order.deleteMany();
-    await prisma.product.deleteMany();
+    await prisma.order_items.deleteMany();
+    await prisma.orders.deleteMany();
+    await prisma.products.deleteMany();
 
     await app.close();
   });

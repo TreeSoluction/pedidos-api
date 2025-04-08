@@ -7,6 +7,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { OrderModule } from './order/order.module';
 import { PlotModule } from './plot/plot.module';
 import { IngredientModule } from './ingredient/ingredient.module';
+import { ExpensesModule } from './expenses/expenses.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { IngredientModule } from './ingredient/ingredient.module';
     OrderModule,
     PlotModule,
     IngredientModule,
+    ExpensesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
